@@ -1,0 +1,168 @@
+---
+- name: Ensure etsin-finder-search directories exist with correct permissions
+  file:
+    path: '{{ item }}'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    state: 'directory'
+    recurse: 'yes'
+    mode: '0755'
+  with_items:
+  - '{{ directory_venv }}'
+  - '{{ directory_config }}'
+  - '{{ directory_log }}'
+  become: yes
+  tags: etsin-qvain-app-configuration
+
+- name: Install etsin-finder-search requirements in virtualenv with pip
+  pip:
+    requirements: '{{ repo_path_data }}/requirements.txt'
+    virtualenv: '{{ directory_venv }}'
+    virtualenv_command: '{{ python_virtualenv_command }}'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Install Etsin-Qvain app_config
+  template:
+    src: 'fairdata-etsin-qvain-app-config.j2'
+    dest: '{{ application_app_config_path }}'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    mode: '0644'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Create directory {{ search_app_scripts_path }} for search app scripts
+  file:
+    path: '{{ search_app_scripts_path }}'
+    state: directory
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    mode: '0755'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Copy search app script 1 to {{ search_app_scripts_path }}
+  template:
+    src: search_script_create_empty_index.sh.j2
+    dest: '{{ search_app_scripts_path }}/create_empty_index.sh'
+    mode: '0755'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Copy search app script 2 to {{ search_app_scripts_path }}
+  template:
+    src: search_script_delete_index.sh.j2
+    dest: '{{ search_app_scripts_path }}/delete_index.sh'
+    mode: '0755'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Copy search app script 3 to {{ search_app_scripts_path }}
+  template:
+    src: search_script_load_test_data_to_index.sh.j2
+    dest: '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
+    mode: '0755'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Copy search app script 4 to {{ search_app_scripts_path }}
+  template:
+    src: search_script_reindex_by_recreating_index.sh.j2
+    dest: '{{ search_app_scripts_path }}/reindex_by_recreating_index.sh'
+    mode: '0755'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Copy search app script 5 to {{ search_app_scripts_path }}
+  template:
+    src: search_script_reindex_without_recreating_index.sh.j2
+    dest: '{{ search_app_scripts_path }}/reindex_without_recreating_index.sh'
+    mode: '0755'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Create empty search index in case it does not exist already
+  shell: '{{ search_app_scripts_path }}/create_empty_index.sh'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Create search index in case it does not exist already and load test data into the search index
+  shell: '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+  when: deployment_environment_id in ['staging', 'test', 'stable', 'demo']
+
+- name: Create cronjob for running reindexing script that does not recreate the search index
+  cron:
+    name: "Reindex search index without recreating the search index"
+    minute: "00"
+    hour: "5"
+    weekday: "1-6"
+    job: "{{ search_app_scripts_path }}/reindex_without_recreating_index.sh >> {{ data_log_base_path }}/{{ data_project_name }}.log"
+    state: present
+    user: "{{ application_user }}"
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Create cronjob for running reindexing script that recreates the search index
+  cron:
+    name: "Reindex search index by recreating the search index"
+    minute: "00"
+    hour: "5"
+    weekday: "7"
+    job: "{{ search_app_scripts_path }}/reindex_by_recreating_index.sh >> {{ data_log_base_path }}/{{ data_project_name }}.log"
+    state: present
+    user: "{{ application_user }}"
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-data-configuration
+
+- name: Copy RabbitMQ consumer service file
+  template:
+    src: 'fairdata-etsin-qvain-rabbitmq-consumer.service.j2'
+    dest: /lib/systemd/system/rabbitmq-consumer.service
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    mode: '0644'
+    force: yes
+  become: yes
+  tags: etsin-qvain-data-configuration
+
+- name: Allow {{ application_user }} to run rabbitmq-consumer service
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    line: "%etsin-user ALL=NOPASSWD: /sbin/service rabbitmq-consumer status, /sbin/service rabbitmq-consumer start, /sbin/service rabbitmq-consumer restart, /sbin/service rabbitmq-consumer stop, /bin/systemctl status rabbitmq-consumer.service, /bin/systemctl start rabbitmq-consumer.service, /bin/systemctl restart rabbitmq-consumer.service, /bin/systemctl stop rabbitmq-consumer.service"
+  become: yes
+  tags: etsin-qvain-data-configuration
+
+- name: Reload configs, enable on boot and start RabbitMQ consumer service
+  systemd:
+    daemon_reload: yes
+    name: rabbitmq-consumer
+    enabled: yes
+    state: started
+  become: yes
+  tags: etsin-qvain-data-configuration

@@ -1,0 +1,30 @@
+---
+- name: Install Etsin-Qvain systemd files
+  template:
+    src: '{{ item.file }}'
+    dest: '{{ item.dest }}'
+    mode: '0644'
+  with_items:
+  - file: 'fairdata-etsin-qvain.service.j2'
+    dest: '/etc/systemd/system/{{ instance_name_common }}.service'
+  - file: 'fairdata-etsin-qvain.socket.j2'
+    dest: '/etc/systemd/system/{{ instance_name_common }}.socket'
+  - file: 'fairdata-etsin-qvain.env.j2'
+    dest: '{{ directory_config }}/fairdata-etsin-qvain.env'
+  - file: 'fairdata-etsin-qvain-gunicorn.py.j2'
+    dest: '{{ directory_config }}/fairdata-etsin-qvain-gunicorn.py'
+  become: yes
+  notify: Restart Etsin-Qvain
+  tags: etsin-qvain-app-systemd
+
+- name: Ensure Etsin-Qvain systemd service is started
+  systemd:
+    name: '{{ item }}'
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  with_items:
+  - '{{ instance_name_common }}.service'
+  - '{{ instance_name_common }}.socket'
+  become: yes
+  tags: etsin-qvain-app-systemd

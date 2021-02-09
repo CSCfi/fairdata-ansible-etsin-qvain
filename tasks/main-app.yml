@@ -1,0 +1,55 @@
+---
+- name: Include Etsin-Qvain user tasks
+  include_tasks: "etsin-qvain-users.yml"
+  when: prepare_application
+  tags: etsin-qvain-users
+
+- name: Include Etsin-Qvain-app prerequisites
+  include_tasks: "etsin-qvain-app-prerequisites.yml"
+  when: prepare_application
+  tags: etsin-qvain-app-prerequisites
+
+- name: Include Etsin-Qvain-app nodejs tasks
+  include_tasks: "etsin-qvain-app-nodejs.yml"
+  when: prepare_application
+  tags: etsin-qvain-app-nodejs
+
+- name: Include Etsin-Qvain-app repository tasks
+  include_tasks: "etsin-qvain-app-repository.yml"
+  when: deploy_application
+  tags: etsin-qvain-app-repository
+
+- name: Include Etsin-Qvain-app configuration tasks
+  include_tasks: "etsin-qvain-app-configuration.yml"
+  when: deploy_application
+  tags: etsin-qvain-app-configuration
+
+- name: Include Etsin-Qvain-app systemd tasks
+  include_tasks: "etsin-qvain-app-systemd.yml"
+  when: deploy_application
+  tags: etsin-qvain-app-systemd
+
+- name: Include Etsin-Qvain-app frontend tasks
+  include_tasks: "etsin-qvain-app-frontend.yml"
+  when: deploy_application
+  tags: etsin-qvain-app-frontend
+
+- name: Include Etsin-Qvain-app delete tasks
+  include_tasks: "etsin-qvain-app-delete.yml"
+  when: delete_deployment or delete_proxy
+  tags: etsin-qvain-app-delete
+
+- name: Include Etsin-Qvain-app nginx tasks
+  include_tasks: "etsin-qvain-app-nginx.yml"
+  when: configure_proxy
+  tags: etsin-qvain-app-nginx
+
+- name: Include Etsin-Qvain-app memcached tasks
+  include_tasks: "etsin-qvain-app-memcached.yml"
+  when: configure_proxy
+  tags: etsin-qvain-app-nginx
+
+- name: Run Etsin-Qvain-app test tasks
+  include_tasks: "etsin-qvain-app-test.yml"
+  when: run_tests
+  tags: etsin-qvain-app-test

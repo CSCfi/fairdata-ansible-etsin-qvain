@@ -1,0 +1,32 @@
+---
+- name: Fetch repository etsin-finder with git
+  git:
+    repo: '{{ repo_url_app }}'
+    version: '{{ repo_version_app }}'
+    force: 'yes'
+    key_file: '{{ repo_deploy_key }}'
+    accept_hostkey: 'yes'
+    dest: '{{ repo_path_app }}'
+  when: repo_install_method == 'pull'
+  become: yes
+  tags: etsin-qvain-app-repository
+
+- name: Push local Etsin-Qvain repository
+  copy:
+    src: '{{ repo_src_app }}'
+    dest: '{{ directory_source_root }}'
+  when: repo_install_method == 'push'
+  tags: etsin-qvain-app-repository
+
+- name: Ensure repository directories exist with correct permissions
+  file:
+    path: '{{ item }}'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    recurse: 'yes'
+    state: 'directory'
+  with_items:
+  - '{{ repo_path }}'
+  - '{{ repo_path_app }}'
+  become: yes
+  tags: etsin-qvain-app-repository

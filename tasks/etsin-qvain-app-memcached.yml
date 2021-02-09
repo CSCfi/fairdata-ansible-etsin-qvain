@@ -1,0 +1,10 @@
+---
+- name: Install Memcached
+  shell: yum -y install memcached warn=false
+  become: yes
+  tags: etsin-qvain-app-memcached
+
+- name: Make sure Memcached is running
+  service: name=memcached enabled=yes state=started
+  become: yes
+  tags: etsin-qvain-app-memcached

@@ -1,0 +1,58 @@
+upstream elasticsearch {
+    keepalive 15;
+    server {{ elasticsearch_hosts | default('127.0.0.1') }}:{{ elasticsearch_port }} weight=3;
+}
+
+# Etsin HTTPS configuration
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name {{ deployment_etsin_fqdn }};
+
+    access_log {{ directory_log }}/etsin-qvain-nginx-access.log;
+    error_log {{ directory_log }}/etsin-qvain-nginx-error.log;
+
+    include conf.d/etsin-qvain-nginx-shared-headers.conf;
+    include conf.d/etsin-qvain-nginx-shared-endpoints.conf;
+
+    location / {
+        include conf.d/etsin-qvain-nginx-shared-headers.conf;
+
+        proxy_pass http://unix:{{ gunicorn_socket }};
+        add_header Set-Cookie "etsin_app=etsin; path=/; SameSite=Lax; Secure";
+        proxy_set_header X-Etsin-App "etsin";
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Google search console ownership verification file
+    location /google18c2b346e42a601e.html {
+        rewrite ^/(.*)  $1;
+        return 200 "google-site-verification: $uri";
+    }
+}
+
+# Qvain HTTPS configuration
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name {{ deployment_qvain_fqdn }};
+
+    access_log {{ directory_log }}/etsin-qvain-nginx-access.log;
+    error_log {{ directory_log }}/etsin-qvain-nginx-error.log;
+
+    include conf.d/etsin-qvain-nginx-shared-headers.conf;
+    include conf.d/etsin-qvain-nginx-shared-endpoints.conf;
+
+    location / {
+        include conf.d/etsin-qvain-nginx-shared-headers.conf;
+
+        proxy_pass http://unix:{{ gunicorn_socket }};
+        add_header Set-Cookie "etsin_app=qvain; path=/; SameSite=Lax; Secure";
+        proxy_set_header X-Etsin-App "qvain";
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

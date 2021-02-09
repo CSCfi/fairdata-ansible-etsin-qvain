@@ -1,0 +1,12 @@
+---
+- name: Get Node 12.x rpm
+  shell: 'curl -sL https://rpm.nodesource.com/setup_12.x'
+  become: yes
+  tags: etsin-qvain-app-nodejs
+
+- name: Install Node
+  yum:
+    name:
+      - nodejs
+  become: yes
+  tags: etsin-qvain-app-nodejs

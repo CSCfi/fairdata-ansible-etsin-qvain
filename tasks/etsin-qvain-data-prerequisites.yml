@@ -1,0 +1,26 @@
+---
+- name: Create search app logging folder to {{ data_log_base_path }}
+  file:
+    path: '{{ data_log_base_path }}'
+    state: directory
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    mode: '0755'
+  become: yes
+  tags: etsin-qvain-data-prerequisites
+
+#- name: Ensure required yum packages are installed
+#  yum:
+#    name:
+#      - gcc
+#      - gcc-c++
+#      - git
+#      - curl
+#      - vim
+#      - zip
+#      - unzip
+#      - rng-tools
+#    state: present, in order not to upgrade any package to an untested version
+#    state: 'present'
+#  become: yes
+#  tags: etsin-qvain-data-prerequisites

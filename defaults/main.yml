@@ -1,0 +1,159 @@
+---
+# Role control variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+prepare_application: True
+deploy_application: True
+deploy_app_server: True
+deploy_data_server: False
+run_tests: True
+configure_proxy: True
+delete_deployment: False
+delete_proxy: False
+delete_etsin_qvain_deployment: False
+delete_etsin_search_deployment: False
+
+# Deployment variables
+# ~~~~~~~~~~~~~~~~~~~~
+instance_domain: 'fairdata.fi'
+deployment_name_common: 'etsin-qvain'
+deployment_name_etsin: 'etsin'
+deployment_name_qvain: 'qvain'
+build_id: '1'
+deployment_etsin_fqdn: '{{ deployment_name_etsin }}.{{ instance_domain }}'
+deployment_qvain_fqdn: '{{ deployment_name_qvain }}.{{ instance_domain }}'
+instance_name_common: 'fairdata-{{ deployment_name_common }}-{{ build_id }}'
+instance_name_etsin: 'fairdata-{{ deployment_name_etsin }}-{{ build_id }}'
+instance_name_qvain: 'fairdata-{{ deployment_name_qvain }}-{{ build_id }}'
+app_debug_mode: True
+deployment_environment_id: 'staging'
+
+# IP varialbes
+webserver_1_internal_ip: '{{ app_hosts }}'
+dataserver_1_internal_ip: '{{ elasticsearch_hosts }}'
+
+# Secret variables
+# ~~~~~~~~~~~~~~~~~~~~
+secret_key: 'secret'
+
+# Directory variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+directory_config: '/etc/{{ instance_name_common }}'
+directory_source_root: '/opt'
+directory_run: '/run'
+directory_log: '/var/log/{{ instance_name_common }}'
+directory_venv: '/usr/local/venvs/{{ instance_name_common }}'
+
+# Directory variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+application_environment: 'test'
+app_log_base_path: '/var/log/{{ app_project_name }}/{{ app_project_name }}.log'
+data_log_base_path: '/var/log/{{ data_project_name }}/{{ data_project_name }}.log'
+app_log_level: 'DEBUG'
+
+# Repository variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+repo_path: '{{ directory_source_root }}/{{ instance_name_common }}'
+repo_path_app: '{{ directory_source_root }}/{{ instance_name_common }}/{{ app_project_name }}'
+repo_path_app_frontend: '{{ repo_path_app }}/etsin_finder/frontend'
+repo_path_data: '{{ directory_source_root }}/{{ instance_name_common }}/{{ data_project_name }}'
+repo_install_method: 'pull'
+repo_url_app: 'https://github.com/CSCfi/etsin-finder'
+repo_version_app: 'master'
+repo_url_data: 'https://github.com/CSCfi/etsin-finder-search'
+repo_version_data: 'master'
+repo_deploy_key: '~/.ssh/id_rsa'
+
+# Etsin-finder-search variables
+search_app_scripts_path: '{{ repo_path_data }}/search_scripts'
+
+# Python virtualenv variables
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+python_virtualenv_command: 'virtualenv'
+
+# Gunicorn variables
+# ~~~~~~~~~~~~~~~~~~
+gunicorn_socket: '{{ directory_run }}/{{ instance_name_common }}.sock'
+gunicorn_workers: 1
+gunicorn_threads: 4
+gunicorn_preload: True
+
+# Application variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+application_user: 'etsin-user'
+application_group: 'etsin-user'
+application_app_config_path: '/home/{{ application_user }}/app_config'
+app_project_name: 'etsin-finder'
+data_project_name: 'etsin-finder-search'
+
+# Elasticsearch variables
+# ~~~~~~~~~~~~~~~~~~~~~~~
+elasticsearch_hosts: 127.0.0.1
+elasticsearch_port: 9200
+elasticsearch_use_ssl: False
+
+# Metax RabbitMQ variables
+# ~~~~~~~~~~~~~~~~~~
+metax_rabbitmq_hosts: ['127.0.0.1']
+metax_rabbitmq_vhost: 'metax'
+metax_rabbitmq_exchange: 'datasets'
+metax_rabbitmq_user: 'etsin'
+metax_rabbitmq_password: 'etsin'
+metax_rabbitmq_port: 1234
+
+# Metax API variables
+# ~~~~~~~~~~~~~~~~~~
+metax_api_host: 'metax.{{ instance_domain }}'
+metax_api_user: 'etsin'
+metax_api_password: 'not_used'
+metax_api_verify_ssl: True
+
+# Metax-Qvain API variables
+# ~~~~~~~~~~~~~~~~~~
+metax_qvain_api_host: 'metax.{{ instance_domain }}'
+metax_qvain_api_user: 'qvain'
+metax_qvain_api_password: 'not_used'
+metax_qvain_api_verify_ssl: True
+
+# Download V2 variables
+# ~~~~~~~~~~~~~~~~~~~~~~~
+download_api_v2_enabled: True
+download_api_v2_host: 'ida.{{ instance_domain }}'
+download_api_v2_port: 1234
+download_api_v2_user: Null
+download_api_v2_password: Null
+download_api_v2_public_host: 'ida.{{ instance_domain }}'
+download_api_v2_public_port: 1234
+
+# Memcached varibles
+# ~~~~~~~~~~~~~~~~~~~~~~~
+memcached_host: 'localhost'
+memcached_port: 1234
+
+# Fairdata REMS API
+# ~~~~~~~~~~~~~~~~~~~~~~~
+fd_rems_enabled: False
+fd_rems_host: 'rems'
+fd_rems_api_key: 1234
+
+# Fairdata SSO variables
+# ~~~~~~~~~~~~~~~~~~~~~~~
+sso_enabled: True
+sso_prefix: 'fairdata_fi'
+sso_key: 'secret'
+sso_host: 'https://sso.{{ instance_domain }}'
+
+# Flags
+# ~~~~~~~~~~~~~~~~~~~~~~~
+flags:
+  flag_value_1: 1
+  flag_value_2: 2
+
+# Nginx variables
+# ~~~~~~~~~~~~~~~
+nginx_port: 443
+nginx_custom_certificates: False
+nginx_ssl_certificate: ''
+nginx_ssl_certificate_key: ''
+nginx_static_root: "{{ repo_path_app_frontend }}/build/"
+nginx_es_credentials_username: etsin
+nginx_es_credentials_password: test-etsin

@@ -1,0 +1,11 @@
+#!/bin/bash
+# Script to reindex all datasets in Elasticsearch without recreating index
+
+if [ "$USER" != "{{ application_user }}" ]; then
+    echo "Run this {{ application_user }}"
+    exit 1
+fi
+
+source {{ directory_venv }}/bin/activate
+cd {{ repo_path_data }}
+python reindex.py recreate_index=no

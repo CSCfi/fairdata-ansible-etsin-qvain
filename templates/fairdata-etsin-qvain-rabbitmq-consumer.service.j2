@@ -1,0 +1,12 @@
+[Unit]
+Description=RabbitMQ consumer
+
+[Service]
+Type=simple
+User={{ application_user }}
+ExecStart={{directory_venv}}/bin/python {{ repo_path_data }}/run_rabbitmq_consumer.py
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

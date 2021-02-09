@@ -1,0 +1,36 @@
+---
+- name: Ensure directories exist with correct permissions
+  file:
+    path: '{{ item }}'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    state: 'directory'
+    recurse: 'yes'
+    mode: '0755'
+  with_items:
+  - '{{ directory_venv }}'
+  - '{{ directory_config }}'
+  - '{{ directory_log }}'
+  become: yes
+  tags: etsin-qvain-app-configuration
+
+- name: Install Etsin-Qvain requirements in virtualenv with pip
+  pip:
+    requirements: '{{ repo_path_app }}/requirements.txt'
+    virtualenv: '{{ directory_venv }}'
+    virtualenv_command: '{{ python_virtualenv_command }}'
+  become: yes
+  become_user: '{{ application_user }}'
+  notify: Restart Etsin-Qvain
+  tags: etsin-qvain-app-configuration
+
+- name: Install Etsin-Qvain app_config
+  template:
+    src: 'fairdata-etsin-qvain-app-config.j2'
+    dest: '{{ application_app_config_path }}'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    mode: '0644'
+  become: yes
+  become_user: '{{ application_user }}'
+  tags: etsin-qvain-app-configuration

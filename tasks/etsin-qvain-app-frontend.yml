@@ -1,0 +1,27 @@
+---
+- name: Remove frontend dependencies from node_modules that are not listed in package.json
+  shell: npm prune
+  become: yes
+  become_user: "{{ application_user }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ repo_path_app_frontend }}"
+  tags: etsin-qvain-app-frontend
+
+- name: Install frontend dependencies based on package.json
+  shell: npm install --only=production
+  become: yes
+  become_user: "{{ application_user }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ repo_path_app_frontend }}"
+  tags: etsin-qvain-app-frontend
+
+- name: Run frontend build with npm
+  shell: npm run build
+  become: yes
+  become_user: "{{ application_user }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ repo_path_app_frontend }}"
+  tags: etsin-qvain-app-frontend

@@ -1,0 +1,25 @@
+---
+- name: Include Etsin-Qvain user tasks
+  include_tasks: "etsin-qvain-users.yml"
+  when: prepare_application
+  tags: etsin-qvain-users
+
+- name: Include Etsin-Qvain-data prerequisites
+  include_tasks: "etsin-qvain-data-prerequisites.yml"
+  when: prepare_application
+  tags: etsin-qvain-data-prerequisites
+
+- name: Include Etsin-Qvain-data repository tasks
+  include_tasks: "etsin-qvain-data-repository.yml"
+  when: deploy_application
+  tags: etsin-qvain-data-repository
+
+- name: Include Etsin-Qvain-data configuration tasks
+  include_tasks: "etsin-qvain-data-configuration.yml"
+  when: deploy_application
+  tags: etsin-qvain-data-configuration
+
+- name: Include Etsin-Qvain-data delete tasks
+  include_tasks: "etsin-qvain-data-delete.yml"
+  when: delete_deployment
+  tags: etsin-qvain-data-delete

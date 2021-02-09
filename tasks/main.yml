@@ -1,0 +1,10 @@
+---
+- name: Include Etsin-Qvain app tasks (etsin-finder)
+  include_tasks: "main-app.yml"
+  when: deploy_app_server
+  tags: main-app
+
+- name: Include Etsin-Qvain data tasks (etsin-finder-search)
+  include_tasks: "main-data.yml"
+  when: deploy_data_server
+  tags: main-data

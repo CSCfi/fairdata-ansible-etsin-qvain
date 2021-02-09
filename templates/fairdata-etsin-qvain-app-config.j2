@@ -1,0 +1,80 @@
+APP_LOG_LEVEL: {{ app_log_level }}
+APP_LOG_PATH: {{ app_log_base_path }}/{{ app_project_name }}.log
+
+SEARCH_APP_LOG_LEVEL: {{ app_log_level }}
+SEARCH_APP_LOG_PATH: {{ data_log_base_path }}/{{ data_project_name }}.log
+
+SERVER_ETSIN_DOMAIN_NAME: {{ deployment_etsin_fqdn }}
+SERVER_QVAIN_DOMAIN_NAME: {{ deployment_qvain_fqdn }}
+SHARED_DOMAIN_NAME_FOR_PROXY: {{ deployment_etsin_fqdn }}
+DEBUG: {{ app_debug_mode }}
+SECRET_KEY: {{ secret_key }}
+SESSION_COOKIE_SAMESITE: None
+SESSION_COOKIE_SECURE: True
+SESSION_COOKIE_HTTPONLY: True
+SESSION_COOKIE_NAME: "etsin_session"
+SESSION_COOKIE_DOMAIN: {{ instance_domain }}
+PERMANENT_SESSION_LIFETIME: 1800
+SESSION_REFRESH_EACH_REQUEST: True
+
+MAIL_SUPPRESS_SEND: false
+MAIL_SERVER: {{ mail_server }}
+MAIL_PORT: {{ mail_port }}
+MAIL_USERNAME: {{ mail_username }}
+MAIL_PASSWORD: {{ mail_password }}
+MAIL_DEFAULT_SENDER: {{ mail_default_sender }}
+
+ELASTICSEARCH:
+  HOSTS: {{ elasticsearch_hosts | default([]) | to_nice_json }}
+  PORT: {{ elasticsearch_port }}
+  USE_SSL: {{ elasticsearch_use_ssl }}
+
+METAX_RABBITMQ:
+  HOSTS: {{ metax_rabbitmq_hosts | default([]) | to_nice_json }}
+  PORT: {{ metax_rabbitmq_port }}
+  VHOST: {{ metax_rabbitmq_vhost }}
+  EXCHANGE: {{ metax_rabbitmq_exchange }}
+  USER: {{ metax_rabbitmq_user }}
+  PASSWORD: {{ metax_rabbitmq_password }}
+
+METAX_API:
+  HOST: {{ metax_api_host }}
+  USER: {{ metax_api_user }}
+  PASSWORD: {{ metax_api_password }}
+  VERIFY_SSL: {{ metax_api_verify_ssl }}
+
+METAX_QVAIN_API:
+  HOST: {{ metax_qvain_api_host }}
+  USER: {{ metax_qvain_api_user }}
+  PASSWORD: {{ metax_qvain_api_password }}
+  VERIFY_SSL: {{ metax_qvain_api_verify_ssl }}
+
+DOWNLOAD_API_V2:
+  ENABLED: {{ download_api_v2_enabled }}
+  HOST: {{ download_api_v2_host }}
+  PORT: {{ download_api_v2_port }}
+  USER: {{ download_api_v2_user }}
+  PASSWORD: {{ download_api_v2_password }}
+  PUBLIC_HOST: {{ download_api_v2_public_host }}
+  PUBLIC_PORT: {{ download_api_v2_public_port }}
+
+MEMCACHED:
+  HOST: {{ memcached_host }}
+  PORT: {{ memcached_port }}
+
+FD_REMS:
+  ENABLED: {{ fd_rems_enabled | default(false) }}
+  HOST: {{ fd_rems_host | default('127.0.0.1') }}
+  API_KEY: {{ fd_rems_api_key | default('changeme') }}
+
+SSO:
+  ENABLED: {{ sso_enabled | default(false) }}
+  PREFIX: {{ sso_prefix }}
+  KEY: {{ sso_key }}
+  HOST: {{ sso_host }}
+
+MATOMO_URL: {{ matomo_url }}
+
+# Runtime feature flags
+FLAGS:
+  {{ flags | to_nice_yaml | indent(2) }}

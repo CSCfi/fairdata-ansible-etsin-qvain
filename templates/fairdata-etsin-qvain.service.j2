@@ -1,0 +1,15 @@
+[Unit]
+Description=Etsin-Qvain
+Requires={{ instance_name_common }}.socket
+After=network.target
+
+[Service]
+Type=simple
+User={{ application_user }}
+Group={{ application_group }}
+EnvironmentFile={{ directory_config }}/fairdata-etsin-qvain.env
+WorkingDirectory={{ repo_path_app }}
+ExecStart=/bin/sh -c '{{ directory_venv }}/bin/gunicorn --config {{ directory_config }}/fairdata-etsin-qvain-gunicorn.py etsin_finder.finder:app'
+
+[Install]
+WantedBy=multi-user.target

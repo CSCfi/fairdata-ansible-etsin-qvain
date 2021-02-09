@@ -1,0 +1,44 @@
+---
+- name: Ensure Etsin-Qvain systemd services are stopped and masked
+  systemd:
+    name: '{{ item }}'
+    state: 'stopped'
+    masked: 'yes'
+    enabled: 'no'
+  with_items:
+  - '{{ instance_name_common }}.service'
+  - '{{ instance_name_common }}.socket'
+  when: delete_deployment
+  ignore_errors: yes
+  become: yes
+  notify: Reload Systemd Daemon
+  tags: etsin-qvain-app-delete
+
+- name: Ensure Etsin-Qvain instance files are deleted
+  file:
+    path: '{{ item }}'
+    state: 'absent'
+  with_items:
+  - '{{ repo_path }}'
+  - '/etc/systemd/system/{{ instance_name_common }}.service'
+  - '/etc/systemd/system/{{ instance_name_common }}.socket'
+  - '{{ directory_config }}'
+  - '{{ directory_run }}/{{ instance_name_common }}.sock'
+  - '{{ directory_log }}'
+  - '{{ directory_venv }}'
+  when: delete_deployment
+  become: yes
+  notify: Reload Systemd Daemon
+  tags: etsin-qvain-app-delete
+
+- name: Ensure Nginx configurations are deleted
+  file:
+    path: '/etc/nginx/{{ item }}/{{ deployment_name_common }}'
+    state: 'absent'
+  with_items:
+  - 'sites-enabled'
+  - 'sites-available'
+  when: delete_proxy
+  become: yes
+  notify: Restart Nginx
+  tags: etsin-qvain-app-delete

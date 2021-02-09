@@ -1,0 +1,57 @@
+---
+- name: Ensure log directory exist with correct permissions
+  file:
+    path: '{{ directory_log }}'
+    owner: '{{ application_user }}'
+    group: '{{ application_group }}'
+    state: 'directory'
+    mode: '0755'
+  become: yes
+  tags: etsin-qvain-app-nginx
+
+- name: Install shared headers for the Etsin-Qvain Nginx configurations
+  template:
+    src: 'etsin-qvain-nginx-shared-headers.conf.j2'
+    dest: '/etc/nginx/conf.d/etsin-qvain-nginx-shared-headers.conf'
+    mode: '0644'
+  become: yes
+  notify: Restart Nginx
+  tags: etsin-qvain-app-nginx
+
+- name: Install shared endpoints for the Etsin-Qvain Nginx configurations
+  template:
+    src: 'etsin-qvain-nginx-shared-endpoints.conf.j2'
+    dest: '/etc/nginx/conf.d/etsin-qvain-nginx-shared-endpoints.conf'
+    mode: '0644'
+  become: yes
+  notify: Restart Nginx
+  tags: etsin-qvain-app-nginx
+
+- name: Install Etsin-Qvain Nginx virtual server definition
+  template:
+    src: 'fairdata-etsin-qvain-nginx.conf.j2'
+    dest: '/etc/nginx/sites-available/{{ deployment_etsin_fqdn }}'
+    mode: '0644'
+  become: yes
+  notify: Restart Nginx
+  tags: etsin-qvain-app-nginx
+
+- name: Enable Etsin-Qvain Nginx virtual server
+  file:
+    path: '/etc/nginx/sites-enabled/{{ deployment_etsin_fqdn }}'
+    src: '/etc/nginx/sites-available/{{ deployment_etsin_fqdn }}'
+    state: link
+  become: yes
+  notify: Restart Nginx
+  tags: etsin-qvain-app-nginx
+
+- name: NGINX | Create basic auth file
+  htpasswd:
+    path: /etc/nginx/es_auth
+    name: "{{ nginx_es_credentials_username }}"
+    password: "{{ nginx_es_credentials_password }}"
+    owner: root
+    group: nginx
+    state: present
+    mode: 0640
+  become: yes

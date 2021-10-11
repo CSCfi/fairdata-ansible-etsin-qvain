@@ -17,11 +17,22 @@
     chdir: "{{ repo_path_app_frontend }}"
   tags: etsin-qvain-app-frontend
 
-- name: Run frontend build with npm
+- name: Run frontend build for cPouta test environments
+  shell: npm run build -- --node-env test
+  become: yes
+  become_user: "{{ application_user }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ repo_path_app_frontend }}"
+  when: deployment_environment_id in ['staging', 'test', 'stable', 'demo']
+  tags: etsin-qvain-app-frontend
+
+- name: Run frontend build for production environment
   shell: npm run build
   become: yes
   become_user: "{{ application_user }}"
   args:
     executable: /bin/bash
     chdir: "{{ repo_path_app_frontend }}"
+  when: deployment_environment_id == 'production'
   tags: etsin-qvain-app-frontend

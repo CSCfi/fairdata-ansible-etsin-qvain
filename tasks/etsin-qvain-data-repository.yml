@@ -1,5 +1,5 @@
 ---
-- name: Fetch repository etsin-finder-search with git
+- name: Fetch Etsin-Search repository with git
   git:
     repo: '{{ repo_url_data }}'
     version: '{{ repo_version_data }}'

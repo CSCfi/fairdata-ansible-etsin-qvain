@@ -1,5 +1,5 @@
 ---
-- name: Ensure etsin-finder-search directories exist with correct permissions
+- name: Ensure Etsin-Search directories exist with correct permissions
   file:
     path: '{{ item }}'
     owner: '{{ application_user }}'
@@ -14,7 +14,7 @@
   become: yes
   tags: etsin-qvain-app-configuration
 
-- name: Install etsin-finder-search requirements in virtualenv with pip
+- name: Install Etsin-Search requirements in virtualenv with pip
   pip:
     requirements: '{{ repo_path_data }}/requirements.txt'
     virtualenv: '{{ directory_venv }}'

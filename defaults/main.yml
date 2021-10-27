@@ -119,7 +119,6 @@ metax_qvain_api_verify_ssl: True
 download_api_v2_enabled: True
 download_api_v2_host: 'ida.{{ instance_domain }}'
 download_api_v2_port: 1234
-download_api_v2_user: Null
 download_api_v2_password: Null
 download_api_v2_public_host: 'ida.{{ instance_domain }}'
 download_api_v2_public_port: 1234

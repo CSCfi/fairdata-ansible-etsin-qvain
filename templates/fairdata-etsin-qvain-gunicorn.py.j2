@@ -1,5 +1,5 @@
-accesslog = '{{ directory_log }}/etsin-qvain-access.log'
-errorlog = '{{ directory_log }}/etsin-qvain-error.log'
+accesslog = '{{ directory_log }}/access.log'
+errorlog = '{{ directory_log }}/error.log'
 workers = {{ gunicorn_workers }}
 threads = {{ gunicorn_threads }}
 preload_app = {{ gunicorn_preload }}

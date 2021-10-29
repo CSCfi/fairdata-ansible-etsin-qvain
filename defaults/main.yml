@@ -47,8 +47,9 @@ directory_venv: '/usr/local/venvs/{{ instance_name_common }}'
 # ~~~~~~~~~~~~~~~~~~~~~~
 application_environment: 'test'
 app_log_base_path: '/var/log/etsin_finder'
+app_log_level: 'INFO'
 data_log_base_path: '/var/log/etsin_finder_search'
-app_log_level: 'DEBUG'
+data_log_level: 'INFO'
 
 # Repository variables
 # ~~~~~~~~~~~~~~~~~~~~~~

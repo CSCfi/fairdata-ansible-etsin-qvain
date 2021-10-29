@@ -16,7 +16,7 @@
 
 - name: Create logrotation for Etsin-Search logs
   template:
-    src: 'fairdata-etsin-qvain-logrotation.conf.j2'
+    src: 'fairdata-etsin-search-logrotation.conf.j2'
     dest: '/etc/logrotate.d/{{ instance_name_common }}'
     mode: '0644'
   become: yes

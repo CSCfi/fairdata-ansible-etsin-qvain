@@ -10,7 +10,7 @@
   with_items:
   - '{{ directory_venv }}'
   - '{{ directory_config }}'
-  - '{{ directory_log }}'
+  - '{{ nginx_directory_log }}'
   become: yes
   tags: etsin-qvain-data-configuration
 
@@ -127,7 +127,7 @@
     minute: "00"
     hour: "5"
     weekday: "1-6"
-    job: "{{ search_app_scripts_path }}/reindex_without_recreating_index.sh >> {{ data_log_base_path }}/{{ data_project_name }}.log"
+    job: "{{ search_app_scripts_path }}/reindex_without_recreating_index.sh >> {{ directory_log_data }}/{{ data_project_name }}.log"
     state: present
     user: "{{ application_user }}"
   become: yes
@@ -140,7 +140,7 @@
     minute: "00"
     hour: "5"
     weekday: "7"
-    job: "{{ search_app_scripts_path }}/reindex_by_recreating_index.sh >> {{ data_log_base_path }}/{{ data_project_name }}.log"
+    job: "{{ search_app_scripts_path }}/reindex_by_recreating_index.sh >> {{ directory_log_data }}/{{ data_project_name }}.log"
     state: present
     user: "{{ application_user }}"
   become: yes

@@ -24,7 +24,7 @@
   - '/etc/systemd/system/{{ instance_name_common }}.socket'
   - '{{ directory_config }}'
   - '{{ directory_run }}/{{ instance_name_common }}.sock'
-  - '{{ directory_log }}'
+  - '{{ nginx_directory_log }}'
   - '{{ directory_venv }}'
   when: delete_deployment
   become: yes

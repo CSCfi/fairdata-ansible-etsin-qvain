@@ -10,7 +10,7 @@
   with_items:
   - '{{ directory_venv }}'
   - '{{ directory_config }}'
-  - '{{ directory_log }}'
+  - '{{ nginx_directory_log }}'
   become: yes
   tags: etsin-qvain-app-configuration
 

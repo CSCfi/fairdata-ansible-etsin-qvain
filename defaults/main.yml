@@ -40,16 +40,12 @@ secret_key: 'secret'
 directory_config: '/etc/{{ instance_name_common }}'
 directory_source_root: '/opt'
 directory_run: '/run'
-directory_log: '/var/log/nginx'
+directory_log_app: '/var/log/etsin_finder'
+directory_log_data: '/var/log/etsin_finder_search'
 directory_venv: '/usr/local/venvs/{{ instance_name_common }}'
-
-# Directory variables
-# ~~~~~~~~~~~~~~~~~~~~~~
-application_environment: 'test'
-app_log_base_path: '/var/log/etsin_finder'
 app_log_level: 'INFO'
-data_log_base_path: '/var/log/etsin_finder_search'
 data_log_level: 'INFO'
+application_environment: 'test'
 
 # Repository variables
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -157,3 +153,4 @@ nginx_ssl_certificate_key: ''
 nginx_static_root: "{{ repo_path_app_frontend }}/build/"
 nginx_es_credentials_username: etsin
 nginx_es_credentials_password: test-etsin
+nginx_directory_log: '/var/log/nginx'

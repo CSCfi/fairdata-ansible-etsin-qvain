@@ -9,8 +9,8 @@ server {
     listen [::]:443 ssl http2;
     server_name {{ deployment_etsin_fqdn }};
 
-    access_log {{ directory_log }}/etsin-qvain-nginx-access.log;
-    error_log {{ directory_log }}/etsin-qvain-nginx-error.log;
+    access_log {{ nginx_directory_log }}/access.log;
+    error_log {{ nginx_directory_log }}/error.log;
 
     include conf.d/etsin-qvain-nginx-shared-headers.conf;
     include conf.d/etsin-qvain-nginx-shared-endpoints.conf;
@@ -39,8 +39,8 @@ server {
     listen [::]:443 ssl http2;
     server_name {{ deployment_qvain_fqdn }};
 
-    access_log {{ directory_log }}/etsin-qvain-nginx-access.log;
-    error_log {{ directory_log }}/etsin-qvain-nginx-error.log;
+    access_log {{ nginx_directory_log }}/access.log;
+    error_log {{ nginx_directory_log }}/error.log;
 
     include conf.d/etsin-qvain-nginx-shared-headers.conf;
     include conf.d/etsin-qvain-nginx-shared-endpoints.conf;

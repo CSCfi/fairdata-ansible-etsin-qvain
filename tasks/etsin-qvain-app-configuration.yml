@@ -10,7 +10,15 @@
   with_items:
   - '{{ directory_venv }}'
   - '{{ directory_config }}'
-  - '{{ directory_log }}'
+  - '{{ nginx_directory_log }}'
+  become: yes
+  tags: etsin-qvain-app-configuration
+
+- name: Create logrotation for Etsin-Qvain logs
+  template:
+    src: 'fairdata-etsin-qvain-logrotation.conf.j2'
+    dest: '/etc/logrotate.d/{{ instance_name_common }}'
+    mode: '0644'
   become: yes
   tags: etsin-qvain-app-configuration
 

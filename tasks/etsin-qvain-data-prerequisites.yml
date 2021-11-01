@@ -1,7 +1,7 @@
 ---
-- name: Create search app logging folder to {{ data_log_base_path }}
+- name: Create search app logging folder to {{ directory_log_data }}
   file:
-    path: '{{ data_log_base_path }}'
+    path: '{{ directory_log_data }}'
     state: directory
     owner: '{{ application_user }}'
     group: '{{ application_group }}'

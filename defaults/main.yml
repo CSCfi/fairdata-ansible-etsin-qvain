@@ -24,7 +24,6 @@ deployment_qvain_fqdn: '{{ deployment_name_qvain }}.{{ instance_domain }}'
 instance_name_common: 'fairdata-{{ deployment_name_common }}-{{ build_id }}'
 instance_name_etsin: 'fairdata-{{ deployment_name_etsin }}-{{ build_id }}'
 instance_name_qvain: 'fairdata-{{ deployment_name_qvain }}-{{ build_id }}'
-app_debug_mode: True
 deployment_environment_id: 'staging'
 
 # IP varialbes
@@ -34,6 +33,9 @@ dataserver_1_internal_ip: '{{ elasticsearch_hosts }}'
 # Secret variables
 # ~~~~~~~~~~~~~~~~~~~~
 secret_key: 'secret'
+app_log_level: 'INFO'
+data_log_level: 'INFO'
+app_debug_mode: False
 
 # Directory variables
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -43,8 +45,6 @@ directory_run: '/run'
 directory_log_app: '/var/log/etsin_finder'
 directory_log_data: '/var/log/etsin_finder_search'
 directory_venv: '/usr/local/venvs/{{ instance_name_common }}'
-app_log_level: 'INFO'
-data_log_level: 'INFO'
 application_environment: 'test'
 
 # Repository variables

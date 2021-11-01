@@ -30,7 +30,7 @@ deployment_environment_id: 'staging'
 webserver_1_internal_ip: '{{ app_hosts }}'
 dataserver_1_internal_ip: '{{ elasticsearch_hosts }}'
 
-# Secret variables
+# Misc variables
 # ~~~~~~~~~~~~~~~~~~~~
 secret_key: 'secret'
 app_log_level: 'INFO'

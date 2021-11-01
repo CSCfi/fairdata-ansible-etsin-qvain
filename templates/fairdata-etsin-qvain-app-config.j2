@@ -9,6 +9,7 @@ SERVER_QVAIN_DOMAIN_NAME: {{ deployment_qvain_fqdn }}
 SHARED_DOMAIN_NAME_FOR_PROXY: {{ deployment_etsin_fqdn }}
 DEBUG: {{ app_debug_mode }}
 SECRET_KEY: {{ secret_key }}
+DEPLOYMENT_ENVIRONMENT_ID: {{ deployment_environment_id }}
 SESSION_COOKIE_SAMESITE: None
 SESSION_COOKIE_SECURE: True
 SESSION_COOKIE_HTTPONLY: True
@@ -53,7 +54,7 @@ DOWNLOAD_API_V2:
   ENABLED: {{ download_api_v2_enabled }}
   HOST: {{ download_api_v2_host }}
   PORT: {{ download_api_v2_port }}
-  PASSWORD: {{ download_api_v2_password }}
+  AUTH_TOKEN: {{ download_api_v2_auth_token }}
   PUBLIC_HOST: {{ download_api_v2_public_host }}
   PUBLIC_PORT: {{ download_api_v2_public_port }}
 
@@ -71,6 +72,8 @@ SSO:
   PREFIX: {{ sso_prefix }}
   KEY: {{ sso_key }}
   HOST: {{ sso_host }}
+
+SSO_COOKIE_DOMAIN: {{ sso_cookie_domain }}
 
 MATOMO_URL: {{ matomo_url }}
 

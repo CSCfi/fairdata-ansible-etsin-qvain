@@ -24,16 +24,18 @@ deployment_qvain_fqdn: '{{ deployment_name_qvain }}.{{ instance_domain }}'
 instance_name_common: 'fairdata-{{ deployment_name_common }}-{{ build_id }}'
 instance_name_etsin: 'fairdata-{{ deployment_name_etsin }}-{{ build_id }}'
 instance_name_qvain: 'fairdata-{{ deployment_name_qvain }}-{{ build_id }}'
-app_debug_mode: True
-deployment_environment_id: 'staging'
 
 # IP varialbes
 webserver_1_internal_ip: '{{ app_hosts }}'
 dataserver_1_internal_ip: '{{ elasticsearch_hosts }}'
 
-# Secret variables
+# Misc variables
 # ~~~~~~~~~~~~~~~~~~~~
 secret_key: 'secret'
+app_log_level: 'INFO'
+data_log_level: 'INFO'
+app_debug_mode: False
+deployment_environment_id: 'production'
 
 # Directory variables
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -43,8 +45,6 @@ directory_run: '/run'
 directory_log_app: '/var/log/etsin_finder'
 directory_log_data: '/var/log/etsin_finder_search'
 directory_venv: '/usr/local/venvs/{{ instance_name_common }}'
-app_log_level: 'INFO'
-data_log_level: 'INFO'
 application_environment: 'test'
 
 # Repository variables
@@ -116,7 +116,7 @@ metax_qvain_api_verify_ssl: True
 download_api_v2_enabled: True
 download_api_v2_host: 'ida.{{ instance_domain }}'
 download_api_v2_port: 1234
-download_api_v2_password: Null
+download_api_v2_auth_token: Null
 download_api_v2_public_host: 'ida.{{ instance_domain }}'
 download_api_v2_public_port: 1234
 
@@ -137,6 +137,7 @@ sso_enabled: True
 sso_prefix: 'fairdata_fi'
 sso_key: 'secret'
 sso_host: 'https://sso.{{ instance_domain }}'
+sso_cookie_domain: 'fairdata.fi'
 
 # Flags
 # ~~~~~~~~~~~~~~~~~~~~~~~

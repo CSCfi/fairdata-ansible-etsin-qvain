@@ -137,6 +137,7 @@ sso_enabled: True
 sso_prefix: 'fairdata_fi'
 sso_key: 'secret'
 sso_host: 'https://sso.{{ instance_domain }}'
+sso_cookie_domain: 'fairdata.fi'
 
 # Flags
 # ~~~~~~~~~~~~~~~~~~~~~~~

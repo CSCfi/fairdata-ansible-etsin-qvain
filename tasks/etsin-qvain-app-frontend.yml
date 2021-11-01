@@ -24,7 +24,7 @@
   args:
     executable: /bin/bash
     chdir: "{{ repo_path_app_frontend }}"
-  when: deployment_environment_id in ['staging', 'test', 'stable', 'demo']
+  when: deployment_environment_id in ['staging', 'test']
   tags: etsin-qvain-app-frontend
 
 - name: Run frontend build for production environment
@@ -34,5 +34,5 @@
   args:
     executable: /bin/bash
     chdir: "{{ repo_path_app_frontend }}"
-  when: deployment_environment_id == 'production'
+  when: deployment_environment_id in ['stable', 'demo', 'production']
   tags: etsin-qvain-app-frontend

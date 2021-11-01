@@ -24,7 +24,6 @@ deployment_qvain_fqdn: '{{ deployment_name_qvain }}.{{ instance_domain }}'
 instance_name_common: 'fairdata-{{ deployment_name_common }}-{{ build_id }}'
 instance_name_etsin: 'fairdata-{{ deployment_name_etsin }}-{{ build_id }}'
 instance_name_qvain: 'fairdata-{{ deployment_name_qvain }}-{{ build_id }}'
-deployment_environment_id: 'staging'
 
 # IP varialbes
 webserver_1_internal_ip: '{{ app_hosts }}'
@@ -36,6 +35,7 @@ secret_key: 'secret'
 app_log_level: 'INFO'
 data_log_level: 'INFO'
 app_debug_mode: False
+deployment_environment_id: 'production'
 
 # Directory variables
 # ~~~~~~~~~~~~~~~~~~~~~~

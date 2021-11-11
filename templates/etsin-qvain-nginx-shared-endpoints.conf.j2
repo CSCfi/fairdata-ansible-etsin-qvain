@@ -96,7 +96,6 @@ location /api/ {
     # elastic_headers
     add_header Cache-Control "no-store" always;
     add_header Content-Security-Policy "default-src 'self'";
-    add_header Content-Disposition 'attachment; filename=response.json' always;
 
     proxy_pass http://unix:{{ gunicorn_socket }};
     proxy_set_header X-Forwarded-Host $host;

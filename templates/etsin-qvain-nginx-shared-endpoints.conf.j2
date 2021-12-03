@@ -1,106 +1,104 @@
-server {
-    # Redirect websocket to webpack development server
-    location /sockjs-node/ {
-        proxy_pass http://localhost:8080;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
+# Redirect websocket to webpack development server
+location /sockjs-node/ {
+    proxy_pass http://localhost:8080;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+}
+
+location /static/ {
+    include conf.d/etsin-qvain-nginx-shared-headers.conf;
+
+    expires 1M;
+    add_header Cache-Control "public";
+    alias "/etsin_finder/frontend/static/";
+}
+
+location /es/metax/dataset/_search {
+    # shared_headers
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Content-Disposition 'attachment; filename=response.json' always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    proxy_cookie_path / "/; HTTPOnly; Secure";
+
+    # elastic_headers
+    add_header Cache-Control "public" always;
+    add_header Content-Security-Policy "default-src 'self'";
+
+    proxy_pass http://elasticsearch/metax/dataset/_search;
+    limit_except GET HEAD POST {
+        auth_basic 'Credentials required';
+        auth_basic_user_file /etc/nginx/es_auth;
     }
+}
 
-    location /static/ {
-        include conf.d/etsin-qvain-nginx-shared-headers.conf;
+location /es/ {
+    # shared_headers
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Content-Disposition 'attachment; filename=response.json' always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    proxy_cookie_path / "/; HTTPOnly; Secure";
 
-        expires 1M;
-        add_header Cache-Control "public";
-        alias "/etsin_finder/frontend/static/";
+    # elastic_headers
+    add_header Cache-Control "public" always;
+    add_header Content-Security-Policy "default-src 'self'";
+
+    proxy_pass http://elasticsearch/;
+    limit_except GET HEAD {
+        auth_basic 'Credentials required';
+        auth_basic_user_file /etc/nginx/es_auth;
     }
+}
 
-    location /es/metax/dataset/_search {
-        # shared_headers
-        add_header X-Frame-Options SAMEORIGIN always;
-        add_header X-Content-Type-Options nosniff always;
-        add_header X-XSS-Protection "1; mode=block" always;
-        add_header Content-Disposition 'attachment; filename=response.json' always;
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-        proxy_cookie_path / "/; HTTPOnly; Secure";
+location ~ ^/(sso|slo|saml_metadata|acs|sls) {
+    include conf.d/etsin-qvain-nginx-shared-headers.conf;
 
-        # elastic_headers
-        add_header Cache-Control "public" always;
-        add_header Content-Security-Policy "default-src 'self'";
+    add_header Cache-Control "no-store" always;
+    rewrite ^/(.*)$ $1 break;
+    proxy_pass http://unix:{{ gunicorn_socket }};
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
 
-        proxy_pass http://elasticsearch/metax/dataset/_search;
-        limit_except GET HEAD POST {
-            auth_basic 'Credentials required';
-            auth_basic_user_file /etc/nginx/es_auth;
-        }
-    }
+location /build/ {
+    include conf.d/etsin-qvain-nginx-shared-headers.conf;
 
-    location /es/ {
-        # shared_headers
-        add_header X-Frame-Options SAMEORIGIN always;
-        add_header X-Content-Type-Options nosniff always;
-        add_header X-XSS-Protection "1; mode=block" always;
-        add_header Content-Disposition 'attachment; filename=response.json' always;
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-        proxy_cookie_path / "/; HTTPOnly; Secure";
+    # elastic_headers
+    add_header Cache-Control "public" always;
+    add_header Content-Security-Policy "default-src 'self'";
+    add_header Content-Disposition 'attachment; filename=response.json' always;
 
-        # elastic_headers
-        add_header Cache-Control "public" always;
-        add_header Content-Security-Policy "default-src 'self'";
+    alias {{ nginx_static_root }};
+}
 
-        proxy_pass http://elasticsearch/;
-        limit_except GET HEAD {
-            auth_basic 'Credentials required';
-            auth_basic_user_file /etc/nginx/es_auth;
-        }
-    }
+location /api/dl {
+    include conf.d/etsin-qvain-nginx-shared-headers.conf;
 
-    location ~ ^/(sso|slo|saml_metadata|acs|sls) {
-        include conf.d/etsin-qvain-nginx-shared-headers.conf;
+    # separate block for dl api to not include content-disposition header
+    add_header Cache-Control "no-store" always;
+    add_header Content-Security-Policy "default-src 'self'";
 
-        add_header Cache-Control "no-store" always;
-        rewrite ^/(.*)$ $1 break;
-        proxy_pass http://unix:{{ gunicorn_socket }};
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+    proxy_pass http://unix:{{ gunicorn_socket }};
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_max_temp_file_size 0;
+}
 
-    location /build/ {
-        include conf.d/etsin-qvain-nginx-shared-headers.conf;
+location /api/ {
+    include conf.d/etsin-qvain-nginx-shared-headers.conf;
 
-        # elastic_headers
-        add_header Cache-Control "public" always;
-        add_header Content-Security-Policy "default-src 'self'";
-        add_header Content-Disposition 'attachment; filename=response.json' always;
+    # elastic_headers
+    add_header Cache-Control "no-store" always;
+    add_header Content-Security-Policy "default-src 'self'";
 
-        alias {{ nginx_static_root }};
-    }
-
-    location /api/dl {
-        include conf.d/etsin-qvain-nginx-shared-headers.conf;
-
-        # separate block for dl api to not include content-disposition header
-        add_header Cache-Control "no-store" always;
-        add_header Content-Security-Policy "default-src 'self'";
-
-        proxy_pass http://unix:{{ gunicorn_socket }};
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_max_temp_file_size 0;
-    }
-
-    location /api/ {
-        include conf.d/etsin-qvain-nginx-shared-headers.conf;
-
-        # elastic_headers
-        add_header Cache-Control "no-store" always;
-        add_header Content-Security-Policy "default-src 'self'";
-
-        proxy_pass http://unix:{{ gunicorn_socket }};
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+    proxy_pass http://unix:{{ gunicorn_socket }};
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
 }

@@ -139,6 +139,12 @@ sso_key: 'secret'
 sso_host: 'https://sso.{{ instance_domain }}'
 sso_cookie_domain: 'fairdata.fi'
 
+# LDAP variables
+# ~~~~~~~~~~~~~~~~~~~~~~~
+ldap_host: 127.0.0.1
+ldap_bind: False
+ldap_password: not_used
+
 # Flags
 # ~~~~~~~~~~~~~~~~~~~~~~~
 flags:

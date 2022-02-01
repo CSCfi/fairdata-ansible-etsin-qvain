@@ -18,12 +18,11 @@ instance_domain: 'fairdata.fi'
 deployment_name_common: 'etsin-qvain'
 deployment_name_etsin: 'etsin'
 deployment_name_qvain: 'qvain'
-build_id: '1'
 deployment_etsin_fqdn: '{{ deployment_name_etsin }}.{{ instance_domain }}'
 deployment_qvain_fqdn: '{{ deployment_name_qvain }}.{{ instance_domain }}'
-instance_name_common: 'fairdata-{{ deployment_name_common }}-{{ build_id }}'
-instance_name_etsin: 'fairdata-{{ deployment_name_etsin }}-{{ build_id }}'
-instance_name_qvain: 'fairdata-{{ deployment_name_qvain }}-{{ build_id }}'
+
+# Using repo_version_app temporarily, to do: refactor in upcoming MR
+instance_name_common: 'fairdata-{{ deployment_name_common }}-{{ repo_version_app }}'
 
 # IP varialbes
 webserver_1_internal_ip: '{{ app_hosts }}'

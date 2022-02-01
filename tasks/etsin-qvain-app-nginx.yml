@@ -1,5 +1,5 @@
 ---
-- name: Ensure log directory exist with correct permissions
+- name: Ensure log directory exists with correct permissions
   file:
     path: '{{ nginx_directory_log }}'
     owner: '{{ application_user }}'

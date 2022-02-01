@@ -160,4 +160,4 @@ nginx_ssl_certificate_key: ''
 nginx_static_root: "{{ repo_path_app_frontend }}/build/"
 nginx_es_credentials_username: etsin
 nginx_es_credentials_password: test-etsin
-nginx_directory_log: '/var/log/nginx'
+nginx_directory_log: '/var/log/{{ instance_name_common }}'

@@ -15,17 +15,6 @@
   args:
     executable: /bin/bash
     chdir: "{{ repo_path_app_frontend }}"
-  when: deployment_environment_id in ['staging', 'test']
-  tags: etsin-qvain-app-frontend
-
-- name: Install dependencies based on package.json (no dev dependencies)
-  shell: npm install --only=production
-  become: yes
-  become_user: "{{ application_user }}"
-  args:
-    executable: /bin/bash
-    chdir: "{{ repo_path_app_frontend }}"
-  when: deployment_environment_id in ['stable', 'demo', 'production']
   tags: etsin-qvain-app-frontend
 
 - name: Run frontend build for cPouta test environments

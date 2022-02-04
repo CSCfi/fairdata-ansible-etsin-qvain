@@ -8,8 +8,8 @@
     chdir: "{{ repo_path_app_frontend }}"
   tags: etsin-qvain-app-frontend
 
-- name: Install frontend dependencies based on package.json
-  shell: npm install --only=production
+- name: Install dependencies and dev dependencies based on package.json
+  shell: npm install
   become: yes
   become_user: "{{ application_user }}"
   args:

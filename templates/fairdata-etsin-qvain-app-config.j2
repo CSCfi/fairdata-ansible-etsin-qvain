@@ -77,6 +77,11 @@ SSO_COOKIE_DOMAIN: {{ sso_cookie_domain }}
 
 MATOMO_URL: {{ matomo_url }}
 
+LDAP:
+  HOST: {{ ldap_host }}
+  BIND: {{ ldap_bind }}
+  PASSWORD: {{ ldap_password }}
+
 # Runtime feature flags
 FLAGS:
   {{ flags | to_nice_yaml | indent(2) }}

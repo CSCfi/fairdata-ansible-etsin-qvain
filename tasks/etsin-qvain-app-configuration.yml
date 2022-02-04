@@ -1,5 +1,5 @@
 ---
-- name: Ensure directories exist with correct permissions
+- name: Ensure that Etsin-Qvain directories exist with correct permissions
   file:
     path: '{{ item }}'
     owner: '{{ application_user }}'
@@ -7,6 +7,7 @@
     state: 'directory'
     recurse: 'yes'
     mode: '0755'
+    force: 'no'
   with_items:
   - '{{ directory_venv }}'
   - '{{ directory_config }}'

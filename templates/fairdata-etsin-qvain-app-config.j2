@@ -81,8 +81,8 @@ LDAP:
   HOST: {{ ldap_host }}
   BIND: {{ ldap_bind }}
   PASSWORD: {{ ldap_password }}
-  USER_FILTERS: {{ ldap_user_filters }}
-  PROJECT_FILTERS: {{ ldap_project_filters }}
+  USER_FILTERS: {{ ldap_user_filters | quote }}
+  PROJECT_FILTERS: {{ ldap_project_filters | quote }}
 
 # Runtime feature flags
 FLAGS:

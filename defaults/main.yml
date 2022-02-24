@@ -143,6 +143,8 @@ sso_cookie_domain: 'fairdata.fi'
 ldap_host: 127.0.0.1
 ldap_bind: False
 ldap_password: not_used
+ldap_user_filters: ~
+ldap_project_filters: ~
 
 # Flags
 # ~~~~~~~~~~~~~~~~~~~~~~~
